@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Для Айгерим ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  overflow: hidden;
+}
+
+h1 {
+  color: white;
+  font-size: 2.5rem;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  margin: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.yes {
+  background: white;
+  color: #ff4d6d;
+}
+
+.no {
+  background: #ff4d6d;
+  color: white;
+  position: absolute;
+}
+
+#typing {
+  margin-top: 20px;
+  font-size: 1.6rem;
+  color: white;
+  min-height: 40px;
+}
+
+#gif {
+  margin-top: 20px;
+  width: 200px;
+  display: none;
+}
+
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  transform: rotate(45deg);
+  animation: float 6s linear infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  border-radius: 50%;
+}
+
+.heart::before { top: -10px; left: 0; }
+.heart::after { left: -10px; top: 0; }
+
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(45deg); opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Айгерим жаным ❤️</h1>
+
+<div class="buttons">
+  <button class="yes" onclick="startSurprise()">ДА</button>
+  <button class="no" id="noBtn">НЕТ</button>
+</div>
+
+<div id="typing"></div>
+<img id="gif" src="cat.gif">
+
+<audio id="music" src="music.mp3"></audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+
+// КНОПКА УБЕГАЕТ (теперь реально работает)
+noBtn.addEventListener("mouseenter", () => {
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 50);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+});
+
+// сердечки
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+
+setInterval(createHeart, 400);
+
+// печатание текста
+function typeText(text) {
+  let i = 0;
+  const el = document.getElementById("typing");
+  el.innerHTML = "";
+
+  function typing() {
+    if (i < text.length) {
+      el.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, 70);
+    } else {
+      document.getElementById("gif").style.display = "block";
+    }
+  }
+
+  typing();
+}
+
+// ГЛАВНАЯ КНОПКА
+function startSurprise() {
+  typeText("установи пабг");
+
+  // музыка
+  const music = document.getElementById("music");
+  music.currentTime = 0;
+  music.play().catch(() => {
+    console.log("Браузер заблокировал звук");
+  });
+
+  // вибрация (телефон)
+  if (navigator.vibrate) {
+    navigator.vibrate([200,100,200]);
+  }
+
+  // взрыв сердечек
+  for (let i = 0; i < 50; i++) {
+    setTimeout(createHeart, i * 60);
+  }
+}
+</script>
+
+</body>
+</html>
